@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +77,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse update(Long studentId, StudentRequest studentRequest) {
-        Student student = studentRepository.findById(studentId).get();
+        Student student = studentRepository.findByIdAndStatus(studentId,Status.ACTIVE).get();
         student.setName(studentRequest.getName());
         student.setSurname(studentRequest.getSurname());
         student.setEmail(studentRequest.getEmail());
@@ -93,6 +94,14 @@ public class StudentServiceImpl implements StudentService {
         response.setCreatedOn(savedStudent.getCreatedOn());
         response.setUpdatedOn(savedStudent.getUpdatedOn());
         return response;
+    }
+
+    @Override
+    public void delete(Long studentId) {
+        final Optional<Student> st = studentRepository.findByIdAndStatus(studentId, Status.ACTIVE);
+        final Student student = st.get();
+        student.setStatus(Status.INACTIVE);
+        studentRepository.save(student);
     }
 
 

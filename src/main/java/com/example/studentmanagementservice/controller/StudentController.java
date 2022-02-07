@@ -6,6 +6,7 @@ import com.example.studentmanagementservice.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Status;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class StudentController {
     @PutMapping({"/{studentId}"})
     public StudentResponse update(@PathVariable("studentId") Long studentId,@RequestBody StudentRequest studentRequest ){
         return studentService.update(studentId,studentRequest);
+
+    }
+    @DeleteMapping({"/{studentId}"})
+    public void delete(@PathVariable("studentId") Long studentId){
+        studentService.delete(studentId);
 
     }
 }
