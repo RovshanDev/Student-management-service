@@ -1,12 +1,15 @@
 package com.example.studentmanagementservice.service.impl;
 
+import com.example.studentmanagementservice.dto.StudentRequest;
 import com.example.studentmanagementservice.dto.StudentResponse;
 import com.example.studentmanagementservice.entity.Student;
+import com.example.studentmanagementservice.enumaration.Status;
 import com.example.studentmanagementservice.repository.StudentRepository;
 import com.example.studentmanagementservice.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,4 +50,29 @@ public class StudentServiceImpl implements StudentService {
         return response;
 
     }
+
+    @Override
+    public StudentResponse create(StudentRequest request) {
+        Student student = new Student();
+        student.setName(request.getName());
+        student.setSurname(request.getSurname());
+        student.setEmail(request.getEmail());
+        student.setPhoneNumber(request.getPhoneNumber());
+        student.setCreatedOn(LocalDateTime.now());
+        student.setUpdatedOn(LocalDateTime.now());
+        student.setStatus(Status.ACTIVE);
+        final Student savedStudent = studentRepository.save(student);
+        StudentResponse response = new StudentResponse();
+        response.setId(savedStudent.getId());
+        response.setName(savedStudent.getName());
+        response.setSurname(savedStudent.getSurname());
+        response.setEmail(savedStudent.getEmail());
+        response.setPhoneNumber(savedStudent.getPhoneNumber());
+        response.setStatus(savedStudent.getStatus());
+        response.setCreatedOn(savedStudent.getCreatedOn());
+        response.setUpdatedOn(savedStudent.getUpdatedOn());
+        return response;
+    }
+
+
 }
