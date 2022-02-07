@@ -74,5 +74,26 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
+    @Override
+    public StudentResponse update(Long studentId, StudentRequest studentRequest) {
+        Student student = studentRepository.findById(studentId).get();
+        student.setName(studentRequest.getName());
+        student.setSurname(studentRequest.getSurname());
+        student.setEmail(studentRequest.getEmail());
+        student.setPhoneNumber(studentRequest.getPhoneNumber());
+        student.setUpdatedOn(LocalDateTime.now());
+        final Student savedStudent = studentRepository.save(student);
+        StudentResponse response = new StudentResponse();
+        response.setId(savedStudent.getId());
+        response.setName(savedStudent.getName());
+        response.setSurname(savedStudent.getSurname());
+        response.setEmail(savedStudent.getEmail());
+        response.setPhoneNumber(savedStudent.getPhoneNumber());
+        response.setStatus(savedStudent.getStatus());
+        response.setCreatedOn(savedStudent.getCreatedOn());
+        response.setUpdatedOn(savedStudent.getUpdatedOn());
+        return response;
+    }
+
 
 }

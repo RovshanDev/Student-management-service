@@ -25,5 +25,10 @@ public class StudentController {
     public StudentResponse create(@Valid @RequestBody StudentRequest studentRequest) {
         return studentService.create(studentRequest);
     }
+    @PutMapping({"/{studentId}"})
+    public StudentResponse update(@PathVariable("studentId") Long studentId,@RequestBody StudentRequest studentRequest ){
+        return studentService.update(studentId,studentRequest);
+
+    }
 }
 
