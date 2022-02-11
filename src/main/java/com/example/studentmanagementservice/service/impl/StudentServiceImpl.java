@@ -4,13 +4,14 @@ import com.example.studentmanagementservice.dto.StudentRequest;
 import com.example.studentmanagementservice.dto.StudentResponse;
 import com.example.studentmanagementservice.entity.Student;
 import com.example.studentmanagementservice.enumaration.Status;
+import com.example.studentmanagementservice.exception.DataNotFoundException;
+import com.example.studentmanagementservice.exception.response.ResponseMessage;
 import com.example.studentmanagementservice.repository.StudentRepository;
 import com.example.studentmanagementservice.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +78,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse update(Long studentId, StudentRequest studentRequest) {
-        Student student = studentRepository.findByIdAndStatus(studentId,Status.ACTIVE).get();
+        final Optional<Student> byIdAndStatus = studentRepository.findByIdAndStatus(studentId, Status.ACTIVE);
+        byIdAndStatus.orElseThrow(() -> new DataNotFoundException(ResponseMessage.DATA_NOT_FOUND));
+        Student student = byIdAndStatus.get();
         student.setName(studentRequest.getName());
         student.setSurname(studentRequest.getSurname());
         student.setEmail(studentRequest.getEmail());
